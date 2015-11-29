@@ -1,0 +1,29 @@
+{
+    "authors": [
+        "author1", "author2"
+    ],
+    "metadata" : [
+        {
+            "name": "name-1",
+            "value": "value-1"
+        },
+        {
+            "name": "name-2",
+            "value": "value-2"
+        }
+    ],
+    "chapters" : [
+        {
+            "name": "chapter-1-name",
+            "body": "chapter-1-body"
+        },
+        {
+            "name": "chapter-1-name",
+            "body": "chapter-1-body"
+        },
+        {
+            "name": "chapter-1-name",
+            "body": "chapter-1-body"
+        }
+    ]
+}
