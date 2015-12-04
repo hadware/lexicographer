@@ -30,10 +30,3 @@ def removeAllEpub() :
     db = client[DATABASE_NAME]
     db.Epub.remove({})
     disconnect()
-
-removeAllEpub()
-#TODO : Find a simplest way to do this
-TEST_FILENAME = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)), 'test/exampleJSON.json')
-my_file = open(TEST_FILENAME, "r")
-content = my_file.read()
-addEpubDB(content)
