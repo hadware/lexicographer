@@ -7,14 +7,12 @@ from bs4 import BeautifulSoup
 
 
 class SimpleChapter(object):
-
     def __init__(self, name, text):
         self.name = name
         self.text = text
 
 
 def epub_to_json(epub_path):
-
     # open epub file
     epub_file = open_epub(epub_path, 'r')
 
@@ -71,6 +69,7 @@ def epub_to_json(epub_path):
     epub_file.close()
 
     return json_obj
+
 
 if __name__ == '__main__':
     # need one argument
