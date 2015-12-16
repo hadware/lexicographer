@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import sys
 from epub import open_epub
 import simplejson as json

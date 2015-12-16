@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 from pymongo import MongoClient
 
@@ -20,7 +18,7 @@ def disconnect():
 
 
 # Add Epub in the collection Epub of the EpubDatabase database
-def addEpubDB(stringJSON):
+def add_epub(stringJSON):
     connect()
     db = client[DATABASE_NAME]
     d = json.loads(stringJSON)
@@ -29,7 +27,7 @@ def addEpubDB(stringJSON):
 
 
 # Remove all the Epub of the collection Epub of the EpubDatabase database
-def removeAllEpub():
+def remove_all_epub():
     connect()
     db = client[DATABASE_NAME]
     db.Epub.remove({})

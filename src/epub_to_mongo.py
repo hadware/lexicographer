@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
 import os
 from epub_to_json import epub_to_json
-from databaseManager import addEpubDB
-from databaseManager import removeAllEpub
+from mongo_manager import add_epub, remove_all_epub
 
 
 def store_epubs(epub_directory):
@@ -13,8 +10,8 @@ def store_epubs(epub_directory):
             nameFile = os.path.join(epub_directory, file)
             print(nameFile)
             jsonObject = epub_to_json(nameFile)
-        #addEpubDB(jsonObject)
+            add_epub(jsonObject)
 
 
-#removeAllEpub()
+remove_all_epub()
 store_epubs(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)), "res/epub"))
