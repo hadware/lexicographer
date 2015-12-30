@@ -12,7 +12,6 @@ def store_epubs(epub_directory):
     # read lines
     with open(manager, 'r') as f:
         manager_content = f.readlines()
-
     # for each epub in directory
     epub_list = os.listdir(epub_directory)
     for file in epub_list:
