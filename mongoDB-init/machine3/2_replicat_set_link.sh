@@ -5,13 +5,13 @@ sleep 5
 echo "Updating Configuration s0 replica set"
 mongo --host 10.0.0.4 --port 37017 << 'EOF'
 ip = "10.0.0.6"
-rs.add(ip + ":67017")
+rs.add(ip + ":37017")
 EOF
 
 # Add this machine to replica set s1
 echo "Updating Configuration s1 replica set"
-mongo --host 10.0.0.5 --port 47018 << 'EOF'
+mongo --host 10.0.0.5 --port 37018 << 'EOF'
 ip = "10.0.0.6"
-rs.add(ip + ":67018")
+rs.add(ip + ":37018")
 EOF
 
