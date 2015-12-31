@@ -1,0 +1,13 @@
+Documentation pour lancer le cluster Mongo DB
+
+1. Attribuer à chaque machine un numéro (correspond aux répertoires)
+
+2. Modifier les fichiers des répertoires avec les bonnes adressses IP
+
+3. Executer le script step1.sh sur chaque machine (lance les instances de mongo sur chaque machine pour différents replica set puis intilialize la configuration du replica set dont la machine sera le PRIMARY)
+
+4. Executer le script step2.sh sur chaque machine (link les différentes instances de mongo aux replica set)
+
+5. Executer le script step3.sh sur chaque machine (Lance un config server sur chaque machine)
+
+6. Executer le script step4.sh sur la machine 1 (Lance le mongos et ajoute les shards à la collection epub.books)
