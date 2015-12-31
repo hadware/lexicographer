@@ -3,8 +3,8 @@ sleep 5
 
 # Add this machine to replica set s1
 echo "Updating Configuration s1 replica set"
-mongo --host 192.168.130.129 --port 47018 << 'EOF'
+mongo --host 10.0.0.5 --port 47018 << 'EOF'
 //Change this IP for different configuration !
-ip = "192.168.1.16"
+ip = "10.0.0.4"
 rs.add(ip + ":37018")
 EOF
