@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Initialization of the replica set s0
+# Initialization of the replica set s1
 echo "Configuring s1 replica set"
 mongo --port 47018 << 'EOF'
 //Change this IP for different configuration !
