@@ -26,18 +26,24 @@ public class WordCountMapper extends Mapper<Object, BSONObject, Text, IntWritabl
         // Pour chaque chapitre on récupère le WCDIdentifier...
         chapters.forEach(c -> {
             System.out.println(c.get("text"));
-            final StringTokenizer itr = new StringTokenizer(c.getString("text"));
-            while (itr.hasMoreTokens()) {
-                identifier.setWord(itr.nextToken());
-                identifier.setChapterId(c.getString("name"));
-                identifier.setDocId(key.toString());
-                String keyOut = String.format("(%s,%s,%s)", identifier.getWord(), identifier.getDocId(), identifier.getChapterId());
-                try {
-                    context.write(new Text(keyOut), one);
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+            String str = c.getString("text");
+            String[] words = str.split(" de | à | et ");
+            for (int i = 0; i < words.length ; i++) {
+                final StringTokenizer itr = new StringTokenizer(words[i]," \t\n\r\f,;:..!\"()-?");
+                while (itr.hasMoreTokens()) {
+                    identifier.setWord(itr.nextToken());
+                    identifier.setChapterId(c.getString("name"));
+                    identifier.setDocId(key.toString());
+                    String keyOut = String.format("(%s,%s,%s)", identifier.getWord(), identifier.getDocId(), identifier.getChapterId());
+                    try {
+                        context.write(new Text(keyOut), one);
+                    } catch (IOException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
+
         });
     }
 }
