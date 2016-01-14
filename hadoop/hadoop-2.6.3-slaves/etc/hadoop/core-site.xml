@@ -25,7 +25,7 @@
 
 <property>
   <name>fs.defaultFS</name>
-  <value>hdfs://amadou-lenovo</value>
+  <value>hdfs://amadou-ahasall.cloudapp.net</value>
   <description>Use HDFS as file storage engine</description>
 </property>
 </configuration>

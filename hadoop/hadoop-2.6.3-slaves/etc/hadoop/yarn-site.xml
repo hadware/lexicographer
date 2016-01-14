@@ -21,23 +21,23 @@ limitations under the License. See accompanying LICENSE file.
     </property>
     <property>
       <name>yarn.resourcemanager.scheduler.address</name>
-      <value>amadou-lenovo:8030</value>
+      <value>amadou-ahasall.cloudapp.net:8030</value>
     </property> 
     <property>
       <name>yarn.resourcemanager.address</name>
-      <value>amadou-lenovo:8032</value>
+      <value>amadou-ahasall.cloudapp.net:8032</value>
     </property>
     <property>
       <name>yarn.resourcemanager.webapp.address</name>
-      <value>amadou-lenovo:8088</value>
+      <value>amadou-ahasall.cloudapp.net:8088</value>
     </property>
     <property>
       <name>yarn.resourcemanager.resource-tracker.address</name>
-      <value>amadou-lenovo:8031</value>
+      <value>amadou-ahasall.cloudapp.net:8031</value>
     </property>
     <property>
       <name>yarn.resourcemanager.admin.address</name>
-      <value>amadou-lenovo:8033</value>
+      <value>amadou-ahasall.cloudapp.net:8033</value>
     </property>
     <property>
       <name>yarn.nodemanager.local-dirs</name>
