@@ -1,5 +1,6 @@
-package com.lexicographer;
+package com.lexicographer.wordCountDoc;
 
+import com.lexicographer.WDCIdentifier;
 import com.mongodb.BasicDBObject;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;

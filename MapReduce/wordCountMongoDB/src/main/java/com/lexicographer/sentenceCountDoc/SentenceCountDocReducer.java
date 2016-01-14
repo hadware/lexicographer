@@ -1,4 +1,4 @@
-package com.lexicographer;
+package com.lexicographer.sentenceCountDoc;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by ahasall on 26/12/15.
  */
-public class WordCountDocReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
+public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
     private final IntWritable result = new IntWritable();
 
     @Override

@@ -1,11 +1,7 @@
-package com.lexicographer;
+package com.lexicographer.wordCount;
 
 import com.mongodb.hadoop.MongoInputFormat;
-import com.mongodb.hadoop.MongoOutputFormat;
-import com.mongodb.hadoop.io.BSONWritable;
 import com.mongodb.hadoop.util.MongoConfigUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;

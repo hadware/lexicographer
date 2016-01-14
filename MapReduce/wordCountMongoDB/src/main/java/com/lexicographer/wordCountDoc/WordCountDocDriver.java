@@ -1,4 +1,4 @@
-package com.lexicographer;
+package com.lexicographer.wordCountDoc;
 
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;

@@ -1,6 +1,6 @@
-package com.lexicographer;
+package com.lexicographer.wordCount;
 
-import com.mongodb.BasicDBList;
+import com.lexicographer.WDCIdentifier;
 import com.mongodb.BasicDBObject;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -9,9 +9,7 @@ import org.bson.BSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
 
 /**
  * Created by ahasall on 26/12/15.

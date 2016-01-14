@@ -1,18 +1,9 @@
-package com.lexicographer;
+package com.lexicographer.wordBySentence;
 
-import com.mongodb.Block;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.hadoop.io.BSONWritable;
+import com.lexicographer.MongoUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.bson.BSONObject;
-import org.bson.BasicBSONObject;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import java.io.IOException;
 

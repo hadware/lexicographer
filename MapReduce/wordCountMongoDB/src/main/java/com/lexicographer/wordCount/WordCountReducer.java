@@ -1,11 +1,8 @@
-package com.lexicographer;
+package com.lexicographer.wordCount;
 
-import com.mongodb.hadoop.io.BSONWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.bson.BSONObject;
-import org.bson.BasicBSONObject;
 
 import java.io.IOException;
 

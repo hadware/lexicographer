@@ -1,4 +1,4 @@
-package com.lexicographer;
+package com.lexicographer.sentenceCountDoc;
 
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;
@@ -15,9 +15,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 /**
  * Word Count MongoDB!
- * Taille moyenne des mots
+ * Nombre moyen de phrases dans les livres
  */
-public class WordSizeDriver extends Configured implements Tool {
+public class SentenceCountDocDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         if (args.length != 2) {
@@ -31,17 +31,17 @@ public class WordSizeDriver extends Configured implements Tool {
         String inputURI = String.format("mongodb://localhost/%s", args[0]);
 //      String outputURI = String.format("mongodb://localhost/%s", args[1]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
-//      MongoConfigUtil.setOutputURI(getConf(), "mongodb://localhost/test.out");
+//           MongoConfigUtil.setOutputURI(getConf(), "mongodb://localhost/test.out");
 
 
-        Job job = new Job(getConf(), "Word Size MongoDB PASS 1");
+        Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
         job.setJarByClass(getClass());
 
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        job.setMapperClass(WordSizeMapper.class);
-        job.setCombinerClass(WordSizeReducer.class);
-        job.setReducerClass(WordSizeReducer.class);
+        job.setMapperClass(SentenceCountDocMapper.class);
+        job.setCombinerClass(SentenceCountDocReducer.class);
+        job.setReducerClass(SentenceCountDocReducer.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -54,7 +54,7 @@ public class WordSizeDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new WordSizeDriver(), args);
+        int exitCode = ToolRunner.run(new SentenceCountDocDriver(), args);
         System.exit(exitCode);
     }
 }
