@@ -20,7 +20,7 @@ import org.apache.hadoop.util.ToolRunner;
 /**
  * Word Count MongoDB!
  */
-public class WordCountDriver extends Configured implements Tool {
+public class WordBySentenceDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         if (args.length != 2) {
@@ -33,21 +33,18 @@ public class WordCountDriver extends Configured implements Tool {
         setConf(new Configuration());
         String inputURI = String.format("mongodb://localhost/%s", args[0]);
 
-        System.out.println("string : " + inputURI);
-
 //      String outputURI = String.format("mongodb://localhost/%s", args[1]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
 //      MongoConfigUtil.setOutputURI(getConf(), "mongodb://localhost/test.out");
-
 
         Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
         job.setJarByClass(getClass());
 
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-        job.setMapperClass(WordCountMapper.class);
-        job.setCombinerClass(WordCountReducer.class);
-        job.setReducerClass(WordCountReducer.class);
+        job.setMapperClass(WordBySentenceMapper.class);
+        job.setCombinerClass(WordBySentenceReducer.class);
+        job.setReducerClass(WordBySentenceReducer.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
@@ -60,7 +57,7 @@ public class WordCountDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new WordCountDriver(), args);
+        int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
         System.exit(exitCode);
     }
 }
