@@ -6,6 +6,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.bson.BSONObject;
+import org.bson.types.ObjectId;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class WordBySentenceMapper extends Mapper<Object, BSONObject, Text, IntWr
     private final WDCIdentifier identifier = new WDCIdentifier();
 
     public void map(Object key, BSONObject value, Context context) throws IOException, InterruptedException {
+        identifier.setDocId(key.toString());
         // Récupération de la liste des chapitres
         ArrayList<BasicDBObject> chapters = (ArrayList<BasicDBObject>) value.get("chapters");
         // Pour chaque chapitre on récupère le WCDIdentifier...
@@ -29,13 +31,10 @@ public class WordBySentenceMapper extends Mapper<Object, BSONObject, Text, IntWr
             String[] tabSentence = c.getString("text").split("\\. | \\. |\\? | \\? |! | ! ");
 
             for (String s : tabSentence) {
-                identifier.setDocId(key.toString());
-                String keyOut = String.format("(%s)", identifier.getDocId());
                 nbrWords.set(s.split(" |:").length);
                 try {
-                    context.write(new Text(keyOut), nbrWords);
-
-                    System.out.println(keyOut + "," + nbrWords);
+                    context.write(new Text(identifier.getDocId()), nbrWords);
+                    System.out.println(identifier.getDocId() + "," + nbrWords);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
