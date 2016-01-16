@@ -1,5 +1,6 @@
 package com.lexicographer.sentenceCountDoc;
 
+import com.lexicographer.MongoUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -19,6 +20,8 @@ public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, In
             sum += val.get();
         }
         result.set( sum );
-        context.write(key, result );
+        MongoUtils.connect();
+        MongoUtils.update("nbrSentenceByBook", key.toString(), result.get());
+        MongoUtils.close();
     }
 }

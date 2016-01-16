@@ -12,7 +12,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
- * Word Count MongoDB!
+ * Count the average of the number of words by sentence in a book
+ * ALSO Count the number of words in a book
  */
 public class WordBySentenceDriver extends Configured implements Tool {
     @Override
@@ -26,14 +27,10 @@ public class WordBySentenceDriver extends Configured implements Tool {
 
         setConf(new Configuration());
         String inputURI = String.format("mongodb://localhost/%s", args[0]);
-
         MongoConfigUtil.setInputURI(getConf(), inputURI);
-        MongoConfigUtil.setOutputURI(getConf(), inputURI);
 
         Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
         job.setJarByClass(getClass());
-
-        //FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         job.setMapperClass(WordBySentenceMapper.class);
         job.setCombinerClass(WordBySentenceReducer.class);
