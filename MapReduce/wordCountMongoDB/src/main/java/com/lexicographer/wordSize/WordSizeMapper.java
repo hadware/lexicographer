@@ -24,24 +24,19 @@ public class WordSizeMapper extends Mapper<Object, BSONObject, Text, IntWritable
         chapters.forEach(c -> {
             System.out.println(c.get("text"));
             String str = c.getString("text");
-            String[] words = str.split(" de | à | et ");
-            for (int i = 0; i < words.length ; i++) {
-                final StringTokenizer itr = new StringTokenizer(words[i]," \t\n\r\f,;:..!\"()-?");
-                while (itr.hasMoreTokens()) {
-                    identifier.setChapterId(c.getString("name"));
-                    identifier.setDocId(key.toString());
-                    String keyOut = String.format("(%s,%s,%s)", "idCommun", identifier.getDocId(), -1);
-                    Integer tailleMot = itr.nextToken().length();
-                    System.out.println(tailleMot);
-                    try {
-                        context.write(new Text(keyOut), new IntWritable(tailleMot));
-                    } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+            final StringTokenizer itr = new StringTokenizer(str, " \t\n\r\f,;:..!\"()-?");
+            while (itr.hasMoreTokens()) {
+                identifier.setDocId(key.toString());
+                String keyOut = identifier.getDocId();
+                Integer tailleMot = itr.nextToken().length();
+                System.out.println(tailleMot);
+                try {
+                    context.write(new Text(keyOut), new IntWritable(tailleMot));
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-
-
         });
     }
 }

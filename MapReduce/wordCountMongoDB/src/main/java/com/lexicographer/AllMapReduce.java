@@ -2,6 +2,8 @@ package com.lexicographer;
 
 import com.lexicographer.sentenceCountDoc.SentenceCountDocDriver;
 import com.lexicographer.wordBySentence.WordBySentenceDriver;
+import com.lexicographer.wordCount.WordCountDriver;
+import com.lexicographer.wordSize.WordSizeDriver;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
@@ -15,6 +17,14 @@ public class AllMapReduce {
             System.exit(exitCode);
 
         exitCode = ToolRunner.run(new SentenceCountDocDriver(), args);
+        if (exitCode != 0)
+            System.exit(exitCode);
+
+        exitCode = ToolRunner.run(new WordCountDriver(), args);
+        if (exitCode != 0)
+            System.exit(exitCode);
+
+        exitCode = ToolRunner.run(new WordSizeDriver(), args);
         if (exitCode != 0)
             System.exit(exitCode);
     }

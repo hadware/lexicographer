@@ -12,7 +12,6 @@ import java.io.IOException;
 public class WDCIdentifier implements WritableComparable {
     String word;
     String docId;
-    String chapterId;
 
     public String getWord() {
         return word;
@@ -30,18 +29,19 @@ public class WDCIdentifier implements WritableComparable {
         this.docId = docId;
     }
 
-    public String getChapterId() {
-        return chapterId;
-    }
-
-    public void setChapterId(String chapterId) {
-        this.chapterId = chapterId;
-    }
-
     public WDCIdentifier(String word, String docId, String chapterId, int count) {
         this.word = word;
         this.docId = docId;
-        this.chapterId = chapterId;
+    }
+
+    public WDCIdentifier(String idWDCIdentifier) {
+        String[] tabFields = idWDCIdentifier.split("-");
+        this.docId = tabFields[0];
+        this.word = tabFields[1];
+    }
+
+    public String convertString() {
+        return this.docId + '-' + this.word;
     }
 
     public WDCIdentifier() {
@@ -57,14 +57,11 @@ public class WDCIdentifier implements WritableComparable {
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(this.word);
         dataOutput.writeUTF(this.docId);
-        dataOutput.writeUTF(this.chapterId);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         this.word = dataInput.readUTF();
         this.docId = dataInput.readUTF();
-        this.chapterId = dataInput.readUTF();
-
     }
 }
