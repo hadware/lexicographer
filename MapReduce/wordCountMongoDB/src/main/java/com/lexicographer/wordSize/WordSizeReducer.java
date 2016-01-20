@@ -1,5 +1,7 @@
 package com.lexicographer.wordSize;
 
+import com.lexicographer.MongoUtils;
+import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -9,8 +11,8 @@ import java.io.IOException;
 /**
  * Created by ahasall on 26/12/15.
  */
-public class WordSizeReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
-    private final IntWritable result = new IntWritable();
+public class WordSizeReducer extends Reducer<Text, IntWritable, Text, FloatWritable>{
+    private final FloatWritable result = new FloatWritable();
 
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -20,7 +22,10 @@ public class WordSizeReducer extends Reducer<Text, IntWritable, Text, IntWritabl
             sum += val.get();
             nb++;
         }
-        result.set( sum / nb  );
-        context.write(key, result );
+        result.set( (float)sum / (float)nb  );
+
+        MongoUtils.connect();
+        MongoUtils.update("meanWordSize", key.toString(), result.get());
+        MongoUtils.close();
     }
 }

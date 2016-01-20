@@ -1,5 +1,7 @@
 package com.lexicographer.wordCount;
 
+import com.lexicographer.MongoUtils;
+import com.lexicographer.WDCIdentifier;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -15,10 +17,16 @@ public class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritab
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
         int sum = 0;
+        WDCIdentifier wci = new WDCIdentifier(key.toString());
         for ( final IntWritable val : values ){
             sum += val.get();
         }
         result.set( sum );
-        context.write(key, result );
+
+        MongoUtils.connect();
+        MongoUtils.addWordGlossary(wci.getDocId(), wci.getWord(), result.get());
+
+        MongoUtils.close();
+
     }
 }
