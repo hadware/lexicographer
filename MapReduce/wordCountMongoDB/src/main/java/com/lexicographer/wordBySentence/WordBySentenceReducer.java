@@ -25,6 +25,7 @@ public class WordBySentenceReducer extends Reducer<Text, IntWritable, Text, IntW
 
         MongoUtils.connect();
         MongoUtils.update("nbrWordBySentence", key.toString(), result.get());
+        MongoUtils.update("nbrWordByBook", key.toString(), sum);
         MongoUtils.close();
     }
 }
