@@ -27,7 +27,8 @@ public class WordCountDriver extends Configured implements Tool {
         }
 
         setConf(new Configuration());
-        String inputURI = String.format("mongodb://localhost/%s", args[0]);
+       // String inputURI = String.format("mongodb://localhost:27021", args[0]);
+        String inputURI = "mongodb://localhost:27017/epub.books";
 
         System.out.println("string : " + inputURI);
 
