@@ -32,7 +32,7 @@ public class WordCountMapper extends Mapper<Object, BSONObject, Text, IntWritabl
                     identifier.setWord(itr.nextToken());
                     identifier.setChapterId(c.getString("name"));
                     identifier.setDocId(key.toString());
-                    String keyOut = String.format("(%s,%s,%s)", identifier.getWord(), identifier.getDocId(), identifier.getChapterId());
+                    String keyOut = String.format("(%s,%s)", identifier.getWord(), identifier.getDocId());
                     try {
                         context.write(new Text(keyOut), one);
                     } catch (IOException | InterruptedException e) {
