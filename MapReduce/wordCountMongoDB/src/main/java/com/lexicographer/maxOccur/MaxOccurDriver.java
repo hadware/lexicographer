@@ -1,29 +1,28 @@
-package com.lexicographer.wordSize;
+package com.lexicographer.maxOccur;
 
+import com.lexicographer.wordCount.WordCountMapper;
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
  * Word Count MongoDB!
- * Taille moyenne des mots
+ * Nombre moyen de phrases dans les livres
  */
-public class WordSizeDriver extends Configured implements Tool {
+public class MaxOccurDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
-        if (args.length != 1) {
-            System.err.printf("Usage: %s [generic options] <inputDB>\n",
+        if (args.length != 2) {
+            System.err.printf("Usage: %s [generic options] <inputDB> <output>\n",
                     getClass().getSimpleName());
             ToolRunner.printGenericCommandUsage(System.err);
             return -1;
@@ -31,29 +30,32 @@ public class WordSizeDriver extends Configured implements Tool {
 
         setConf(new Configuration());
         String inputURI = String.format("mongodb://localhost/%s", args[0]);
+//      String outputURI = String.format("mongodb://localhost/%s", args[1]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
+//           MongoConfigUtil.setOutputURI(getConf(), "mongodb://localhost/test.out");
 
-        Job job = new Job(getConf(), "Word Size MongoDB PASS 1");
+
+        Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
         job.setJarByClass(getClass());
 
-        job.setMapperClass(WordSizeMapper.class);
-        job.setCombinerClass(WordSizeReducer.class);
-        job.setReducerClass(WordSizeReducer.class);
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+        job.setMapperClass(WordCountMapper.class);
+        job.setCombinerClass(MaxOccurReducer.class);
+        job.setReducerClass(MaxOccurReducer.class);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-
         job.setInputFormatClass(MongoInputFormat.class);
-        //Car mise à jour de Mongo dans le Reducer
-        job.setOutputFormatClass(NullOutputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
         System.out.println("Conf: " + getConf());
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new WordSizeDriver(), args);
+        int exitCode = ToolRunner.run(new MaxOccurDriver(), args);
         System.exit(exitCode);
     }
 }
