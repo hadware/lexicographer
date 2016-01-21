@@ -25,7 +25,6 @@ public class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritab
 
         MongoUtils.connect();
         MongoUtils.addWordGlossary(wci.getDocId(), wci.getWord(), result.get());
-
         MongoUtils.close();
 
     }

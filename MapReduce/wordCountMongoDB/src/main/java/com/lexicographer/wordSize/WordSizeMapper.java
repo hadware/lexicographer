@@ -22,15 +22,12 @@ public class WordSizeMapper extends Mapper<Object, BSONObject, Text, IntWritable
         ArrayList<BasicDBObject> chapters = (ArrayList<BasicDBObject>) value.get("chapters");
         // Pour chaque chapitre on récupère le WCDIdentifier...
         chapters.forEach(c -> {
-            System.out.println(c.get("text"));
             String str = c.getString("text");
-
             final StringTokenizer itr = new StringTokenizer(str, " \t\n\r\f,;:..!\"()-?");
             while (itr.hasMoreTokens()) {
                 identifier.setDocId(key.toString());
                 String keyOut = identifier.getDocId();
                 Integer tailleMot = itr.nextToken().length();
-                System.out.println(tailleMot);
                 try {
                     context.write(new Text(keyOut), new IntWritable(tailleMot));
                 } catch (IOException | InterruptedException e) {

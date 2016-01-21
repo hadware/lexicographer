@@ -30,7 +30,6 @@ public class WordBySentenceMapper extends Mapper<Object, BSONObject, Text, IntWr
                 nbrWords.set(s.split(" |:").length);
                 try {
                     context.write(new Text(identifier.getDocId()), nbrWords);
-                    System.out.println(identifier.getDocId() + "," + nbrWords);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -51,12 +51,12 @@ public class WordCountMapper extends Mapper<Object, BSONObject, Text, IntWritabl
 			for (int i = 0; i < words.length ; i++) {
 
             	if(!words[i].trim().isEmpty() && words[i].length() > 1 && !(Arrays.asList(stopwords).contains(words[i].trim().toLowerCase()))) {
-	            	System.out.println("-" + words[i].trim().toLowerCase() + "\n");
 	            	stemmer.setCurrent(words[i].trim().toLowerCase());
 	    			stemmer.stem();
 	    			identifier.setDocId(key.toString());
 	    			identifier.setWord(stemmer.getCurrent());
 					String keyOut = identifier.convertString();
+					System.out.println(identifier.getWord());
 	                try {
 	                    context.write(new Text(keyOut), one);
 	                } catch (IOException | InterruptedException e) {

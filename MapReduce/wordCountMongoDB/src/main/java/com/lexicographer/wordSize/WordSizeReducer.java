@@ -25,7 +25,7 @@ public class WordSizeReducer extends Reducer<Text, IntWritable, Text, FloatWrita
         result.set( (float)sum / (float)nb  );
 
         MongoUtils.connect();
-        MongoUtils.update("meanWordSize", key.toString(), result.get());
+        MongoUtils.updateStat("meanWordSize", key.toString(), result.get());
         MongoUtils.close();
     }
 }

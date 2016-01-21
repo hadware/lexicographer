@@ -1,5 +1,6 @@
 package com.lexicographer.sentenceCountDoc;
 
+import com.lexicographer.MongoUtils;
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;
 import org.apache.hadoop.conf.Configuration;
@@ -21,6 +22,7 @@ import org.apache.hadoop.util.ToolRunner;
 public class SentenceCountDocDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
+        System.out.println("Starting SentenceCountDoc MapReduce...");
         if (args.length != 1) {
             System.err.printf("Usage: %s [generic options] <inputDB>\n",
                     getClass().getSimpleName());
@@ -29,7 +31,7 @@ public class SentenceCountDocDriver extends Configured implements Tool {
         }
 
         setConf(new Configuration());
-        String inputURI = String.format("mongodb://localhost/%s", args[0]);
+        String inputURI = MongoUtils.getInputURI(args[0]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
 
         Job job = new Job(getConf(), "Word Count MongoDB PASS 1");

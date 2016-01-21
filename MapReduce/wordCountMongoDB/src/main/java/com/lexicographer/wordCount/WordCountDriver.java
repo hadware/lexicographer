@@ -1,5 +1,6 @@
 package com.lexicographer.wordCount;
 
+import com.lexicographer.MongoUtils;
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;
 import org.apache.hadoop.conf.Configuration;
@@ -20,6 +21,7 @@ import org.apache.hadoop.util.ToolRunner;
 public class WordCountDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
+        System.out.println("Starting WordCount MapReduce...");
         if (args.length != 1) {
             System.err.printf("Usage: %s [generic options] <inputDB>\n",
                     getClass().getSimpleName());
@@ -28,10 +30,7 @@ public class WordCountDriver extends Configured implements Tool {
         }
 
         setConf(new Configuration());
-        String inputURI = String.format("mongodb://localhost/%s", args[0]);
-
-        System.out.println("string : " + inputURI);
-
+        String inputURI = MongoUtils.getInputURI(args[0]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
 
         Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
