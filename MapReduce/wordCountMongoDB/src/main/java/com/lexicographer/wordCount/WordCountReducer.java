@@ -22,10 +22,6 @@ public class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritab
             sum += val.get();
         }
         result.set( sum );
-
-        MongoUtils.connect();
-        MongoUtils.addWordGlossary(wci.getDocId(), wci.getWord(), result.get());
-        MongoUtils.close();
-
+        context.write(key, result);
     }
 }

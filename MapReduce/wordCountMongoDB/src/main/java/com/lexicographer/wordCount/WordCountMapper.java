@@ -56,7 +56,6 @@ public class WordCountMapper extends Mapper<Object, BSONObject, Text, IntWritabl
 	    			identifier.setDocId(key.toString());
 	    			identifier.setWord(stemmer.getCurrent());
 					String keyOut = identifier.convertString();
-					System.out.println(identifier.getWord());
 	                try {
 	                    context.write(new Text(keyOut), one);
 	                } catch (IOException | InterruptedException e) {

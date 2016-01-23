@@ -12,21 +12,27 @@ import org.apache.hadoop.util.ToolRunner;
 public class AllMapReduce {
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
-        if (exitCode != 0)
-            System.exit(exitCode);
+        try {
+            MongoUtils.connect();
+            int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
+            if (exitCode != 0)
+                System.exit(exitCode);
 
-        exitCode = ToolRunner.run(new SentenceCountDocDriver(), args);
-        if (exitCode != 0)
-            System.exit(exitCode);
+            exitCode = ToolRunner.run(new SentenceCountDocDriver(), args);
+            if (exitCode != 0)
+                System.exit(exitCode);
 
-        exitCode = ToolRunner.run(new WordCountDriver(), args);
-        if (exitCode != 0)
-            System.exit(exitCode);
+            exitCode = ToolRunner.run(new WordCountDriver(), args);
+            MongoUtils.addWordsGlossary("output/part-r-00000.bson");
+            if (exitCode != 0)
+                System.exit(exitCode);
 
-        exitCode = ToolRunner.run(new WordSizeDriver(), args);
-        if (exitCode != 0)
-            System.exit(exitCode);
+            exitCode = ToolRunner.run(new WordSizeDriver(), args);
+            if (exitCode != 0)
+                System.exit(exitCode);
+        } finally {
+            MongoUtils.close();
+        }
     }
 }
 
