@@ -39,7 +39,7 @@ public class MongoUtils {
     }
 
     public static void addWordsGlossary(String filename) throws FileNotFoundException {
-        HashMap<String, ArrayList<DBObject>> map = convertToJSONString(filename);
+        HashMap<String, ArrayList<DBObject>> map = extractInformation(filename);
         for(Map.Entry<String, ArrayList<DBObject>> entry : map.entrySet()) {
             addWordsMongo(entry.getKey(), entry.getValue());
         }
@@ -60,7 +60,7 @@ public class MongoUtils {
         return String.format("mongodb://localhost/%s", collection);
     }
 
-    private static HashMap<String, ArrayList<DBObject>> convertToJSONString(String filename) throws FileNotFoundException {
+    private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
         File file = new File(filename);
         String docId;
         HashMap<String, ArrayList<DBObject>> map = new HashMap<>();
