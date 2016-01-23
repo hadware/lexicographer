@@ -51,7 +51,7 @@ class Parser(object):
                     chapter_text += text
 
         # sanitize text
-        chapter_text = chapter_text.replace('\n', ' ').replace('*', '')
+        chapter_text = chapter_text.replace('\n', ' ').replace('*', '').replace('"', ' ')
         chapter_text = chapter_text.strip()
 
         return chapter_text
