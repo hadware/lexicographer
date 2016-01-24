@@ -3,7 +3,9 @@ package com.lexicographer;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.UpdateOptions;
 import org.bson.BSONDecoder;
 import org.bson.BSONObject;
 import org.bson.BasicBSONDecoder;
@@ -11,9 +13,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by robin on 14/01/16.
@@ -29,28 +29,30 @@ public class MongoUtils {
     }
 
     public static void updateStat(String statName, String id, int value) {
-        db.getCollection("books").updateOne(new Document("_id", new ObjectId(id)),
-                new Document("$set", new Document("stats." + statName, value)));
+        db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
+                new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
     }
 
     public static void updateStat(String statName, String id, float value) {
-        db.getCollection("books").updateOne(new Document("_id", new ObjectId(id)),
-                new Document("$set", new Document("stats." + statName, value)));
+        db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
+                new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
     }
 
     public static void addWordsGlossary(String filename) throws FileNotFoundException {
         HashMap<String, ArrayList<DBObject>> map = extractInformation(filename);
-        for(Map.Entry<String, ArrayList<DBObject>> entry : map.entrySet()) {
-            addWordsMongo(entry.getKey(), entry.getValue());
+        if (map != null) {
+            for (Map.Entry<String, ArrayList<DBObject>> entry : map.entrySet()) {
+                addWordsMongo(entry.getKey(), entry.getValue());
+            }
         }
     }
 
     private static void addWordsMongo(String docId, ArrayList<DBObject> documents) {
-        db.getCollection("booksStats").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
+        db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
         System.out.println("Doc inserted " + docId);
     }
 
-    public static String getInputURI(String collection){
+    public static String getInputURI(String collection) {
         return String.format("mongodb://localhost/%s", collection);
     }
 
@@ -96,4 +98,17 @@ public class MongoUtils {
         mongoClient.close();
     }
 
+    public static void storeIdf(String word, Set<String> ids) {
+        DBObject o = new BasicDBObject(word, ids);
+        db.getCollection("idf").updateOne(new Document("_id", "idf"),
+                new Document("$set", o));
+    }
+
+    public static void initIdf() {
+        try {
+            db.getCollection("idf").drop();
+            db.getCollection("idf").insertOne(new Document("_id", "idf"));
+        } catch (MongoWriteException e) {
+        }
+    }
 }

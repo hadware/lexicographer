@@ -1,7 +1,9 @@
-package com.lexicographer.sentenceCountDoc;
+package com.lexicographer.idf;
 
 import com.lexicographer.MongoUtils;
+import com.mongodb.hadoop.BSONFileOutputFormat;
 import com.mongodb.hadoop.MongoInputFormat;
+import com.mongodb.hadoop.MongoOutputFormat;
 import com.mongodb.hadoop.util.MongoConfigUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -11,18 +13,17 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 /**
  * Word Count MongoDB!
- * Nombre moyen de phrases dans les livres
  */
-public class SentenceCountDocDriver extends Configured implements Tool {
+public class IdfDriver extends Configured implements Tool {
+
     @Override
     public int run(String[] args) throws Exception {
-        System.out.println("Starting SentenceCountDoc MapReduce...");
+        System.out.println("Starting WordCount MapReduce...");
         if (args.length != 1) {
             System.err.printf("Usage: %s [generic options] <inputDB>\n",
                     getClass().getSimpleName());
@@ -34,14 +35,15 @@ public class SentenceCountDocDriver extends Configured implements Tool {
         String inputURI = MongoUtils.getInputURI(args[0]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
 
-        Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
+        Job job = new Job(getConf(), "Idf");
         job.setJarByClass(getClass());
 
-        job.setMapperClass(SentenceCountDocMapper.class);
-        job.setReducerClass(SentenceCountDocReducer.class);
+        job.setMapperClass(IdfMapper.class);
+        job.setReducerClass(IdfReducer.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
+
 
         job.setInputFormatClass(MongoInputFormat.class);
         //Car mise à jour de Mongo dans le Reducer
@@ -53,7 +55,8 @@ public class SentenceCountDocDriver extends Configured implements Tool {
 
     public static void main(String[] args) throws Exception {
         MongoUtils.connect();
-        int exitCode = ToolRunner.run(new SentenceCountDocDriver(), args);
+        MongoUtils.initIdf();
+        int exitCode = ToolRunner.run(new IdfDriver(), args);
         MongoUtils.close();
         System.exit(exitCode);
     }

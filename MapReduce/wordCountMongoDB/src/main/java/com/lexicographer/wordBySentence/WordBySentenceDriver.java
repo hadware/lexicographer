@@ -35,7 +35,6 @@ public class WordBySentenceDriver extends Configured implements Tool {
         job.setJarByClass(getClass());
 
         job.setMapperClass(WordBySentenceMapper.class);
-        job.setCombinerClass(WordBySentenceReducer.class);
         job.setReducerClass(WordBySentenceReducer.class);
 
         job.setOutputKeyClass(Text.class);
