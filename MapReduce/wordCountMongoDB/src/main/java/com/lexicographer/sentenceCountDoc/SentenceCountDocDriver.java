@@ -38,7 +38,6 @@ public class SentenceCountDocDriver extends Configured implements Tool {
         job.setJarByClass(getClass());
 
         job.setMapperClass(SentenceCountDocMapper.class);
-        job.setCombinerClass(SentenceCountDocReducer.class);
         job.setReducerClass(SentenceCountDocReducer.class);
 
         job.setOutputKeyClass(Text.class);

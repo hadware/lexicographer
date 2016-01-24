@@ -43,7 +43,6 @@ public class WordCountDriver extends Configured implements Tool {
         job.setJarByClass(getClass());
 
         job.setMapperClass(WordCountMapper.class);
-        job.setCombinerClass(WordCountReducer.class);
         job.setReducerClass(WordCountReducer.class);
 
         job.setOutputKeyClass(Text.class);
