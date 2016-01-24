@@ -46,14 +46,8 @@ public class MongoUtils {
     }
 
     private static void addWordsMongo(String docId, ArrayList<DBObject> documents) {
-        db.getCollection("books").updateOne(new Document("_id", new ObjectId(docId)),
-                new Document("$addToSet", new Document("glossary", documents)));
-        System.out.println("Doc updated " + docId);
-    }
-
-    //TODO : Return an HashMap <docId, occ>
-    private static HashMap<String, Integer> getOccsMax() {
-        return null;
+        db.getCollection("booksStats").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
+        System.out.println("Doc inserted " + docId);
     }
 
     public static String getInputURI(String collection){
@@ -76,13 +70,10 @@ public class MongoUtils {
                 }
                 docId = ((String) obj.get("_id")).split("-")[0];
                 String word = ((String) obj.get("_id")).split("-")[1];
-                //TODO : delete it
-                word = word.replace("\"", "\\\"");
                 Integer occurency = (Integer) obj.get("value");
                 DBObject document = new BasicDBObject();
                 document.put("word", word);
                 document.put("occ", occurency);
-                //TODO : add the tf calculation (0.5 + 0.5 * (occurency / getOccMax(docId))
                 if (!map.containsKey(docId)) {
                     map.put(docId, new ArrayList<DBObject>());
                 }
