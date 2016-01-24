@@ -3,6 +3,7 @@ package com.lexicographer;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 import org.bson.BSONDecoder;
 import org.bson.BSONObject;
@@ -12,6 +13,7 @@ import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +22,12 @@ import java.util.Map;
  */
 public class MongoUtils {
 
+    private static final String ipAddress = "40.115.36.216";
     private static MongoClient mongoClient;
     private static MongoDatabase db;
 
     public static void connect() {
-        mongoClient = new MongoClient("localhost", 27017);
+        mongoClient = new MongoClient(ipAddress, 27017);
         db = mongoClient.getDatabase("epub");
     }
 
@@ -51,7 +54,7 @@ public class MongoUtils {
     }
 
     public static String getInputURI(String collection){
-        return String.format("mongodb://localhost/%s", collection);
+        return String.format("mongodb://%s/%s", ipAddress,collection);
     }
 
     private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
