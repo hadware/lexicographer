@@ -1,5 +1,5 @@
 import os
-from epub_to_json import epub_to_json
+from epub_to_json import Parser
 from mongo_manager import add_epub, remove_all_epub
 
 
@@ -21,13 +21,14 @@ def store_epubs(epub_directory):
             if file.endswith(".epub"):
                 namefile = os.path.join(epub_directory, file)
                 # extract json
-                json = epub_to_json(namefile)
+                parser = Parser(namefile)
+                json = parser.epub_to_json()
                 # add to database
                 add_epub(json)
                 # add to manager content
                 with open(manager, 'a') as f:
                     f.write(file + '\n')
-                print(file + "done.")
+                    print(file + " done.")
 
 
 remove_all_epub()

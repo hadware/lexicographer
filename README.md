@@ -4,3 +4,9 @@ Moteur de recherche lexicographique sur des fichiers Epub, distribué sur Spark,
 # Commande pour installer pip
 sudo apt-get install python-pip
 sudo pip install --upgrade pip
+
+lxml
+simplejson
+beautifulSoup4
+pymongo
+epub

@@ -48,16 +48,16 @@ public class WordCountMapper extends Mapper<Object, BSONObject, Text, IntWritabl
         	
 			String[] words = c.get("text").toString().split("\\s+|\\+|&|#|\\%|\\.|,|;|\\:|\\?|!|\"|\'|”|“|‘|’|\\(|\\)|[|]|\\-|—|\\{|\\}|[0-9]");
 
+
 			
 			for (int i = 0; i < words.length ; i++) {
 
             	if(!words[i].trim().isEmpty() && words[i].length() > 1 && !(Arrays.asList(stopwords).contains(words[i].trim().toLowerCase()))) {
 	            	stemmer.setCurrent(words[i].trim().toLowerCase());
 	    			stemmer.stem();
-	    			identifier.setChapterId(c.getString("name"));
 	    			identifier.setDocId(key.toString());
 	    			identifier.setWord(stemmer.getCurrent());
-	            	String keyOut = String.format("(%s,%s,%s)", identifier.getWord(), identifier.getDocId(), identifier.getChapterId());
+					String keyOut = identifier.convertString();
 	                try {
 	                    context.write(new Text(keyOut), one);
 	                } catch (IOException | InterruptedException e) {

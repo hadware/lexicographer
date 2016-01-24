@@ -20,8 +20,7 @@ public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, In
             sum += val.get();
         }
         result.set( sum );
-        MongoUtils.connect();
-        MongoUtils.update("nbrSentenceByBook", key.toString(), result.get());
-        MongoUtils.close();
+
+        MongoUtils.updateStat("nbrSentenceByBook", key.toString(), result.get());
     }
 }

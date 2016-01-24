@@ -23,7 +23,6 @@ public class SentenceCountDocMapper extends Mapper<Object, BSONObject, Text, Int
         ArrayList<BasicDBObject> chapters = (ArrayList<BasicDBObject>) value.get("chapters");
         // Pour chaque chapitre on récupère le WCDIdentifier...
         chapters.forEach(c -> {
-            System.out.println(c.get("text"));
             String str = c.getString("text");
             String[] words = str.split("\\. | \\. |\\? | \\? |! | ! ");
             try {

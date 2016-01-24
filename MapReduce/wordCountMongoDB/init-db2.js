@@ -3,12 +3,28 @@ db.in.insert({
     "chapters": [
         {
             "name": "chapitre 1",
-            "text": "Je me demande combien de fois de ta mere et ton pere. merde ! etage ? Et toi ... Oui"
+            "text": "femme femme femme femme femme"
         },
         {
             "name": "chapitre 2",
-            "text": "J'aime les femmes qui ont du caractère ; et les femmes qui baisent bien" 
+            "text": "toi toi" 
         }
-    ]
+    ],
+	"maxOcc" : 34
+});
+;
+
+db.in.insert({
+    "chapters": [
+        {
+            "name": "chapitre 1",
+            "text": "homme homme homme femme"
+        },
+        {
+            "name": "chapitre 2",
+            "text": "coucou coucou femme" 
+        }
+    ],
+	"maxOcc" : 78
 });
 ;
