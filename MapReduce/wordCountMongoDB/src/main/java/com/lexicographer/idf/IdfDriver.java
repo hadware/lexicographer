@@ -23,7 +23,7 @@ public class IdfDriver extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        System.out.println("Starting WordCount MapReduce...");
+        System.out.println("Starting Idf MapReduce...");
 
         final Configuration conf = new Configuration();
         MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
