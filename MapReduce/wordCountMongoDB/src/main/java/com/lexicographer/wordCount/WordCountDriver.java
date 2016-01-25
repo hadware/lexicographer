@@ -30,13 +30,7 @@ public class WordCountDriver extends Configured implements Tool {
 
         setConf(new Configuration());
         
-       // String inputURI = String.format("mongodb://localhost:27021", args[0]);
-        String inputURI = "mongodb://localhost:27017/epub.books";
-
-        System.out.println("string : " + inputURI);
-
-//      String outputURI = String.format("mongodb://localhost/%s", args[1]);
-
+        String inputURI = MongoUtils.getInputURI(args[0]);
         MongoConfigUtil.setInputURI(getConf(), inputURI);
 
         Job job = new Job(getConf(), "Word Count MongoDB PASS 1");

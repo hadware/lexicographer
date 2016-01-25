@@ -8,7 +8,7 @@ client = MongoClient()
 # Database connexion
 def connect():
     global client
-    client = MongoClient('localhost', 27017)
+    client = MongoClient('40.115.36.216', 27017)
 
 
 # Database disconnexion

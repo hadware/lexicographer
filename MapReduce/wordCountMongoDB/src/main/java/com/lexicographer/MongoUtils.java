@@ -18,6 +18,7 @@ import java.util.*;
  */
 public class MongoUtils {
 
+    private static final String ipAddress = "40.115.36.216";
     private static MongoClient mongoClient;
     private static MongoDatabase db;
     private static MongoClientURIBuilder uriBuilder =new MongoClientURIBuilder();
@@ -33,8 +34,7 @@ public class MongoUtils {
         return uriBuilder.build();
     }
     public static void connect() {
-        mongoClient = new MongoClient("localhost", 27017);
-
+        mongoClient = new MongoClient(uriBuilder.build());
         db = mongoClient.getDatabase("epub");
     }
 
@@ -63,7 +63,7 @@ public class MongoUtils {
     }
 
     public static String getInputURI(String collection) {
-        return String.format("mongodb://localhost/%s", collection);
+        return String.format("mongodb://%s/%s", ipAddress, collection);
     }
 
     private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
