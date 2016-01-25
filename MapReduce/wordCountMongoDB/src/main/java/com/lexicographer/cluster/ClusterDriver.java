@@ -10,6 +10,7 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -23,7 +24,7 @@ public class ClusterDriver extends Configured implements Tool {
         final Configuration conf = new Configuration();
 
         MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
-        MongoConfigUtil.setOutputURI( conf, "mongodb://localhost/test.out" );
+        //MongoConfigUtil.setOutputURI( conf, "mongodb://localhost/test.out" );
         System.out.println( "Conf: " + conf );
 
         final Job job = new Job( conf, "word count" );
@@ -38,7 +39,7 @@ public class ClusterDriver extends Configured implements Tool {
         job.setOutputValueClass( IntWritable.class );
 
         job.setInputFormatClass( MongoInputFormat.class );
-        job.setOutputFormatClass( MongoOutputFormat.class );
+        job.setOutputFormatClass( NullOutputFormat.class );
 
         return job.waitForCompletion(true) ? 0 : 1;
     }

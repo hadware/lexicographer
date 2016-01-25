@@ -18,7 +18,6 @@ import java.util.*;
  */
 public class MongoUtils {
 
-    private static final String ipAddress = "40.115.36.216";
     private static MongoClient mongoClient;
     private static MongoDatabase db;
     private static MongoClientURIBuilder uriBuilder =new MongoClientURIBuilder();
@@ -27,12 +26,13 @@ public class MongoUtils {
         uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
         uriBuilder.addHost("epub2-a7q4vt06.cloudapp.net", 27017);
         uriBuilder.addHost("epub3-k16i2rdh.cloudapp.net", 27017);
-        uriBuilder.collection("test", "in");
+        uriBuilder.collection("epub", "books");
     }
 
     public static MongoClientURI buildInputURI(){
         return uriBuilder.build();
     }
+
     public static void connect() {
         mongoClient = new MongoClient(uriBuilder.build());
         db = mongoClient.getDatabase("epub");
@@ -60,10 +60,6 @@ public class MongoUtils {
     private static void addWordsMongo(String docId, ArrayList<DBObject> documents) {
         db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
         System.out.println("Doc inserted " + docId);
-    }
-
-    public static String getInputURI(String collection) {
-        return String.format("mongodb://%s/%s", ipAddress, collection);
     }
 
     private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
