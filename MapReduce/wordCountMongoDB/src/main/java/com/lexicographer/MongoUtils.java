@@ -1,11 +1,9 @@
 package com.lexicographer;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoWriteException;
+import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.hadoop.util.MongoClientURIBuilder;
 import org.bson.BSONDecoder;
 import org.bson.BSONObject;
 import org.bson.BasicBSONDecoder;
@@ -22,9 +20,21 @@ public class MongoUtils {
 
     private static MongoClient mongoClient;
     private static MongoDatabase db;
+    private static MongoClientURIBuilder uriBuilder =new MongoClientURIBuilder();
 
+    static {
+        uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
+        uriBuilder.addHost("epub2-a7q4vt06.cloudapp.net", 27017);
+        uriBuilder.addHost("epub3-k16i2rdh.cloudapp.net", 27017);
+        uriBuilder.collection("test", "in");
+    }
+
+    public static MongoClientURI buildInputURI(){
+        return uriBuilder.build();
+    }
     public static void connect() {
         mongoClient = new MongoClient("localhost", 27017);
+
         db = mongoClient.getDatabase("epub");
     }
 

@@ -1,5 +1,6 @@
 package com.lexicographer.cluster;
 
+import com.lexicographer.MongoUtils;
 import com.mongodb.hadoop.MongoInputFormat;
 import com.mongodb.hadoop.MongoOutputFormat;
 import com.mongodb.hadoop.util.MongoClientURIBuilder;
@@ -20,17 +21,8 @@ public class ClusterDriver extends Configured implements Tool {
     public int run(String[] args) throws Exception {
 
         final Configuration conf = new Configuration();
-        MongoClientURIBuilder uriBuilder =new MongoClientURIBuilder();
-        uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
-        uriBuilder.addHost("epub2-a7q4vt06.cloudapp.net", 27017);
-        uriBuilder.addHost("epub3-k16i2rdh.cloudapp.net", 27017);
-/*
-        uriBuilder.addHost("localhost",27017);
-*/
-        uriBuilder.collection("test", "in");
 
-        MongoConfigUtil.setInputURI( conf, uriBuilder.build());
-
+        MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
         MongoConfigUtil.setOutputURI( conf, "mongodb://localhost/test.out" );
         System.out.println( "Conf: " + conf );
 
