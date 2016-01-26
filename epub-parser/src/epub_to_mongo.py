@@ -20,9 +20,11 @@ def store_epubs(epub_directory):
             # if epub
             if file.endswith(".epub"):
                 namefile = os.path.join(epub_directory, file)
+                print("Parsing " + file)
                 # extract json
                 parser = Parser(namefile)
                 json = parser.epub_to_json()
+                print("Parsing done")
                 # add to database
                 add_epub(json)
                 # add to manager content
