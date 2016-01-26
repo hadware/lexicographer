@@ -21,25 +21,11 @@ public class WordCountDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         System.out.println("Starting WordCount MapReduce...");
-        if (args.length != 1) {
-            System.err.printf("Usage: %s [generic options] <inputDB>\n",
-                    getClass().getSimpleName());
-            ToolRunner.printGenericCommandUsage(System.err);
-            return -1;
-        }
 
-        setConf(new Configuration());
-        
-       // String inputURI = String.format("mongodb://localhost:27021", args[0]);
-        String inputURI = "mongodb://localhost:27017/epub.books";
+        final Configuration conf = new Configuration();
+        MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
 
-        System.out.println("string : " + inputURI);
-
-//      String outputURI = String.format("mongodb://localhost/%s", args[1]);
-
-        MongoConfigUtil.setInputURI(getConf(), inputURI);
-
-        Job job = new Job(getConf(), "Word Count MongoDB PASS 1");
+        Job job = new Job(conf, "Word Count MongoDB PASS 1");
         job.setJarByClass(getClass());
 
         job.setMapperClass(WordCountMapper.class);
@@ -53,7 +39,6 @@ public class WordCountDriver extends Configured implements Tool {
         job.setInputFormatClass(MongoInputFormat.class);
         //Car mise à jour de Mongo dans le Reducer
         job.setOutputFormatClass(BSONFileOutputFormat.class);
-        System.out.println("Conf: " + getConf());
 
         return job.waitForCompletion(true) ? 0 : 1;
     }

@@ -25,18 +25,11 @@ public class WordSizeDriver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         System.out.println("Starting WordSize MapReduce...");
-        if (args.length != 1) {
-            System.err.printf("Usage: %s [generic options] <inputDB>\n",
-                    getClass().getSimpleName());
-            ToolRunner.printGenericCommandUsage(System.err);
-            return -1;
-        }
 
-        setConf(new Configuration());
-        String inputURI = MongoUtils.getInputURI(args[0]);
-        MongoConfigUtil.setInputURI(getConf(), inputURI);
+        final Configuration conf = new Configuration();
+        MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
 
-        Job job = new Job(getConf(), "Word Size MongoDB PASS 1");
+        Job job = new Job(conf, "Word Size MongoDB PASS 1");
         job.setJarByClass(getClass());
 
         job.setMapperClass(WordSizeMapper.class);
@@ -46,11 +39,9 @@ public class WordSizeDriver extends Configured implements Tool {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-
         job.setInputFormatClass(MongoInputFormat.class);
         //Car mise à jour de Mongo dans le Reducer
         job.setOutputFormatClass(NullOutputFormat.class);
-        System.out.println("Conf: " + getConf());
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
