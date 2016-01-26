@@ -39,7 +39,7 @@ public class IdfMapper extends Mapper<Object, BSONObject, Text, Text> {
 				e1.printStackTrace();
 			}
 
-			String[] words = c.get("text").toString().split("\\s+|\\+|&|#|\\%|\\.|,|;|\\:|\\?|!|\"|\'|”|“|‘|’|\\(|\\)|[|]|\\-|—|\\{|\\}|[0-9]|=|<|>");
+			String[] words = c.get("text").toString().split("\\s+| |\\+|&|#|\\%|\\.|,|;|\\:|\\?|!|\"|\'|”|“|‘|’|\\(|\\)|[|]|\\-|—|\\{|\\}|[0-9]|=|<|>");
 
 
 			for (int i = 0; i < words.length ; i++) {
