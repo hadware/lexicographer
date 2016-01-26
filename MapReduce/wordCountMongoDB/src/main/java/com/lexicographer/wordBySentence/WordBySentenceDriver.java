@@ -41,9 +41,7 @@ public class WordBySentenceDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        MongoUtils.connect();
         int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
-        MongoUtils.close();
         System.exit(exitCode);
     }
 }

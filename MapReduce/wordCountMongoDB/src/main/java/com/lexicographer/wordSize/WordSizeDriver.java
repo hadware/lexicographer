@@ -47,9 +47,7 @@ public class WordSizeDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        MongoUtils.connect();
         int exitCode = ToolRunner.run(new WordSizeDriver(), args);
-        MongoUtils.close();
         System.exit(exitCode);
     }
 }

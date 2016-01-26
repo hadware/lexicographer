@@ -20,7 +20,8 @@ public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, In
             sum += val.get();
         }
         result.set( sum );
-
+        MongoUtils.connect();
         MongoUtils.updateStat("nbrSentence", key.toString(), result.get());
+        MongoUtils.close();
     }
 }

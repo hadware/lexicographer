@@ -15,7 +15,6 @@ public class AllMapReduce {
     public static void main(String[] args) throws Exception {
         long ti = System.currentTimeMillis();
         try {
-            MongoUtils.connect();
             System.out.println("running Word By Sentence Driver ");
             int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
             if (exitCode != 0)
