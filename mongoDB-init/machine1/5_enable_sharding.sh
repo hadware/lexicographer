@@ -10,4 +10,5 @@ sh.shardCollection("epub.bookStats",{"_id" : 1})
 sh.shardCollection("epub.glossaries",{"_id" : 1})
 sh.shardCollection("epub.authors",{"_id" : 1})
 sh.shardCollection("epub.subjects",{"_id" : 1})
+sh.shardCollection("epub.idf",{"_id" : 1})
 EOF
