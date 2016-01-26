@@ -35,7 +35,6 @@ public class WordBySentenceMapper extends Mapper<Object, BSONObject, Text, IntWr
                 }
             }
         });
-        System.out.println("Map for doc " + identifier.getDocId());
     }
 }
 

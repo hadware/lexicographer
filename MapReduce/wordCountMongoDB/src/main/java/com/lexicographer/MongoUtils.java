@@ -13,14 +13,11 @@ import org.bson.types.ObjectId;
 import java.io.*;
 import java.util.*;
 
-/**
- * Created by robin on 14/01/16.
- */
 public class MongoUtils {
 
     private static MongoClient mongoClient;
     private static MongoDatabase db;
-    private static MongoClientURIBuilder uriBuilder =new MongoClientURIBuilder();
+    private static MongoClientURIBuilder uriBuilder = new MongoClientURIBuilder();
 
     static {
         uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
@@ -29,7 +26,7 @@ public class MongoUtils {
         uriBuilder.collection("epub", "books");
     }
 
-    public static MongoClientURI buildInputURI(){
+    public static MongoClientURI buildInputURI() {
         return uriBuilder.build();
     }
 
@@ -39,13 +36,25 @@ public class MongoUtils {
     }
 
     public static void updateStat(String statName, String id, int value) {
-        db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
-                new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
+        updateStat(statName, id, (float) value);
     }
 
     public static void updateStat(String statName, String id, float value) {
-        db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
-                new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
+        try {
+            System.out.println("Updating " + statName + " for doc " + id);
+            db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
+                    new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
+        } catch (MongoException e) {
+            System.out.println("Exception updating stat " + statName + " on document " + id + "\nWaiting 5sec before retrying");
+            try {
+                Thread.sleep(5000);
+                db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
+                        new Document("$set", new Document("stats." + statName, value)), new UpdateOptions().upsert(true));
+            } catch (InterruptedException | MongoException e1) {
+                System.err.println("Exception updating stat " + statName + " on document " + id + ": " + e1.getMessage());
+                System.exit(0);
+            }
+        }
     }
 
     public static void addWordsGlossary(String filename) throws FileNotFoundException {
@@ -58,8 +67,20 @@ public class MongoUtils {
     }
 
     private static void addWordsMongo(String docId, ArrayList<DBObject> documents) {
-        db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
-        System.out.println("Doc inserted " + docId);
+        try {
+            System.out.println("Updating glossary for doc " + docId);
+            db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
+            System.out.println("Doc inserted " + docId);
+        } catch (MongoException e) {
+            System.out.println("Exception adding words on document " + docId + "\nWaiting 5sec before retrying");
+            try {
+                Thread.sleep(5000);
+                db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
+            } catch (InterruptedException | MongoException e1) {
+                System.err.println("Exception adding words on document " + docId + ": " + e1.getMessage());
+                System.exit(0);
+            }
+        }
     }
 
     private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
@@ -69,8 +90,8 @@ public class MongoUtils {
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 
         BSONDecoder decoder = new BasicBSONDecoder();
-        int count = 0;
         try {
+            int count = 0;
             while (inputStream.available() > 0) {
                 BSONObject obj = decoder.readObject(inputStream);
                 if (obj == null) {
@@ -83,7 +104,7 @@ public class MongoUtils {
                 document.put("word", word);
                 document.put("occ", occurency);
                 if (!map.containsKey(docId)) {
-                    map.put(docId, new ArrayList<DBObject>());
+                    map.put(docId, new ArrayList<>());
                 }
                 map.get(docId).add(document);
                 count++;
@@ -105,16 +126,48 @@ public class MongoUtils {
     }
 
     public static void storeIdf(String word, Set<String> ids) {
-        DBObject o = new BasicDBObject(word, ids);
-        db.getCollection("idf").updateOne(new Document("_id", "idf"),
-                new Document("$set", o));
+        try {
+            System.out.println("Stroring idf");
+            DBObject o = new BasicDBObject(word, ids);
+            db.getCollection("idf").updateOne(new Document("_id", "idf"), new Document("$set", o));
+        } catch (MongoException e) {
+            System.out.println("Exception storing idf\nWaiting 5sec before retrying");
+            try {
+                Thread.sleep(5000);
+                DBObject o = new BasicDBObject(word, ids);
+                db.getCollection("idf").updateOne(new Document("_id", "idf"), new Document("$set", o));
+            } catch (InterruptedException | MongoException e1) {
+                System.err.println("Exception storing idf: " + e1.getMessage());
+                System.exit(0);
+            }
+        }
     }
 
     public static void initIdf() {
         try {
             db.getCollection("idf").drop();
+        } catch (MongoException e) {
+            System.out.println("Exception droping idf\nWaiting 5sec before retrying");
+            try {
+                Thread.sleep(5000);
+                db.getCollection("idf").drop();
+            } catch (InterruptedException | MongoException e1) {
+                System.err.println("Exception droping idf: " + e1.getMessage());
+                System.exit(0);
+            }
+        }
+
+        try {
             db.getCollection("idf").insertOne(new Document("_id", "idf"));
-        } catch (MongoWriteException e) {
+        } catch (MongoException e) {
+            System.out.println("Exception inserting idf\nWaiting 5sec before retrying");
+            try {
+                Thread.sleep(5000);
+                db.getCollection("idf").insertOne(new Document("_id", "idf"));
+            } catch (InterruptedException | MongoException e1) {
+                System.err.println("Exception inserting idf: " + e1.getMessage());
+                System.exit(0);
+            }
         }
     }
 }
