@@ -15,6 +15,7 @@ public class AllMapReduce {
     public static void main(String[] args) throws Exception {
         long ti = System.currentTimeMillis();
         try {
+            MongoUtils mongo = new MongoUtils();
             System.out.println("running Word By Sentence Driver ");
             int exitCode = ToolRunner.run(new WordBySentenceDriver(), args);
             if (exitCode != 0)
@@ -30,7 +31,7 @@ public class AllMapReduce {
 
             System.out.println("running Word Count Driver ");
             exitCode = ToolRunner.run(new WordCountDriver(), args);
-            MongoUtils.addWordsGlossary("output/part-r-00000.bson");
+            mongo.addWordsGlossary("output/part-r-00000.bson");
             if (exitCode != 0)
                 System.exit(exitCode);
             System.out.println("Word Count Driver : " + (System.currentTimeMillis() - ti));
@@ -42,13 +43,13 @@ public class AllMapReduce {
             System.out.println("Word Size Driver : " + (System.currentTimeMillis() - ti));
 
             System.out.println("running IDF Driver ");
-            MongoUtils.initIdf();
+            mongo.initIdf();
             exitCode = ToolRunner.run(new IdfDriver(), args);
             if (exitCode != 0)
                 System.exit(exitCode);
             System.out.println("IDF Driver : " + (System.currentTimeMillis() - ti));
         } finally {
-            MongoUtils.close();
+
         }
     }
 }

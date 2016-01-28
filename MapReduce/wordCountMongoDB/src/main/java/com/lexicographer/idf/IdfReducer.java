@@ -13,6 +13,8 @@ import java.util.Set;
  */
 public class IdfReducer extends Reducer<Text, Text, Text, Text> {
 
+    private MongoUtils mongo = new MongoUtils();
+
     @Override
     protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         Set<String> set = new HashSet<>();
@@ -20,7 +22,7 @@ public class IdfReducer extends Reducer<Text, Text, Text, Text> {
         for (final Text val : values) {
             set.add(val.toString());
         }
-        MongoUtils.storeIdf(key.toString(), set);
+        mongo.storeIdf(key.toString(), set);
         Object[] objects = set.toArray();
         context.write(key, new Text(objects.toString()));
     }

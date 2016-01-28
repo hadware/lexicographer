@@ -1,9 +1,7 @@
-package com.lexicographer.cluster;
+package com.lexicographer.clus;
 
 import com.lexicographer.MongoUtils;
 import com.mongodb.hadoop.MongoInputFormat;
-import com.mongodb.hadoop.MongoOutputFormat;
-import com.mongodb.hadoop.util.MongoClientURIBuilder;
 import com.mongodb.hadoop.util.MongoConfigUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -24,7 +22,6 @@ public class ClusterDriver extends Configured implements Tool {
         final Configuration conf = new Configuration();
 
         MongoConfigUtil.setInputURI( conf, MongoUtils.buildInputURI());
-        //MongoConfigUtil.setOutputURI( conf, "mongodb://localhost/test.out" );
         System.out.println( "Conf: " + conf );
 
         final Job job = new Job( conf, "word count" );

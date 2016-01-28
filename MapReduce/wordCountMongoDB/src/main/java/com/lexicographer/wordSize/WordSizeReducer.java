@@ -13,6 +13,8 @@ import java.io.IOException;
  */
 public class WordSizeReducer extends Reducer<Text, IntWritable, Text, FloatWritable>{
     private final FloatWritable result = new FloatWritable();
+    private MongoUtils mongo = new MongoUtils();
+
 
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -23,8 +25,6 @@ public class WordSizeReducer extends Reducer<Text, IntWritable, Text, FloatWrita
             nb++;
         }
         result.set( (float)sum / (float)nb  );
-        MongoUtils.connect();
-        MongoUtils.updateStat("meanWordSize", key.toString(), result.get());
-        MongoUtils.close();
+        mongo.updateStat("meanWordSize", key.toString(), result.get());
     }
 }

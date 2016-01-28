@@ -1,4 +1,4 @@
-package com.lexicographer.cluster;
+package com.lexicographer.clus;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;

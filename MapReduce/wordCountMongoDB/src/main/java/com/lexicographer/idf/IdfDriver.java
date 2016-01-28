@@ -45,10 +45,10 @@ public class IdfDriver extends Configured implements Tool {
     }
 
     public static void main(String[] args) throws Exception {
-        MongoUtils.connect();
-        MongoUtils.initIdf();
+        MongoUtils mongoUtils = new MongoUtils();
+        mongoUtils.initIdf();
+        mongoUtils.close();
         int exitCode = ToolRunner.run(new IdfDriver(), args);
-        MongoUtils.close();
         System.exit(exitCode);
     }
 }

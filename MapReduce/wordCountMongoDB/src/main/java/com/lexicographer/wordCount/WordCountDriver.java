@@ -45,9 +45,8 @@ public class WordCountDriver extends Configured implements Tool {
 
     public static void main(String[] args) throws Exception {
         int exitCode = ToolRunner.run(new WordCountDriver(), args);
-        MongoUtils.connect();
-        MongoUtils.addWordsGlossary("output/part-r-00000.bson");
-        MongoUtils.close();
+        MongoUtils mongo = new MongoUtils();
+        mongo.addWordsGlossary("hdfs://output/part-r-00000.bson");
         System.exit(exitCode);
     }
 }

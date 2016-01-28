@@ -4,6 +4,8 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.hadoop.util.MongoClientURIBuilder;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.bson.BSONDecoder;
 import org.bson.BSONObject;
 import org.bson.BasicBSONDecoder;
@@ -11,14 +13,14 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 public class MongoUtils {
 
-    private static MongoClient mongoClient;
-    private static MongoDatabase db;
+    private MongoClient mongoClient;
+    private MongoDatabase db;
     private static MongoClientURIBuilder uriBuilder = new MongoClientURIBuilder();
-
     static {
         uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
         uriBuilder.addHost("epub2-a7q4vt06.cloudapp.net", 27017);
@@ -30,16 +32,16 @@ public class MongoUtils {
         return uriBuilder.build();
     }
 
-    public static void connect() {
+    public MongoUtils() {
         mongoClient = new MongoClient(uriBuilder.build());
         db = mongoClient.getDatabase("epub");
     }
 
-    public static void updateStat(String statName, String id, int value) {
+    public void updateStat(String statName, String id, int value) {
         updateStat(statName, id, (float) value);
     }
 
-    public static void updateStat(String statName, String id, float value) {
+    public void updateStat(String statName, String id, float value) {
         try {
             System.out.println("Updating " + statName + " for doc " + id);
             db.getCollection("bookStats").updateOne(new Document("_id", new ObjectId(id)),
@@ -57,7 +59,7 @@ public class MongoUtils {
         }
     }
 
-    public static void addWordsGlossary(String filename) throws FileNotFoundException {
+    public void addWordsGlossary(String filename) throws FileNotFoundException {
         HashMap<String, ArrayList<DBObject>> map = extractInformation(filename);
         if (map != null) {
             for (Map.Entry<String, ArrayList<DBObject>> entry : map.entrySet()) {
@@ -66,7 +68,7 @@ public class MongoUtils {
         }
     }
 
-    private static void addWordsMongo(String docId, ArrayList<DBObject> documents) {
+    private void addWordsMongo(String docId, ArrayList<DBObject> documents) {
         try {
             System.out.println("Updating glossary for doc " + docId);
             db.getCollection("glossaries").insertOne(new Document("_id", new ObjectId(docId)).append("glossary", documents));
@@ -83,11 +85,12 @@ public class MongoUtils {
         }
     }
 
-    private static HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
+    private HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
         File file = new File(filename);
         String docId;
         HashMap<String, ArrayList<DBObject>> map = new HashMap<>();
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
 
         BSONDecoder decoder = new BasicBSONDecoder();
         try {
@@ -121,13 +124,13 @@ public class MongoUtils {
         }
     }
 
-    public static void close() {
+    public void close() {
         mongoClient.close();
     }
 
-    public static void storeIdf(String word, Set<String> ids) {
+    public void storeIdf(String word, Set<String> ids) {
         try {
-            System.out.println("Stroring idf");
+            System.out.println("Storing idf");
             DBObject o = new BasicDBObject(word, ids);
             db.getCollection("idf").updateOne(new Document("_id", "idf"), new Document("$set", o));
         } catch (MongoException e) {
@@ -143,7 +146,7 @@ public class MongoUtils {
         }
     }
 
-    public static void initIdf() {
+    public void initIdf() {
         try {
             db.getCollection("idf").drop();
         } catch (MongoException e) {

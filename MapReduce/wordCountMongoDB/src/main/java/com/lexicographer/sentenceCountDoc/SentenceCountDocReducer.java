@@ -12,6 +12,9 @@ import java.io.IOException;
  */
 public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
     private final IntWritable result = new IntWritable();
+    private MongoUtils mongo = new MongoUtils();
+
+
 
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -20,8 +23,6 @@ public class SentenceCountDocReducer extends Reducer<Text, IntWritable, Text, In
             sum += val.get();
         }
         result.set( sum );
-        MongoUtils.connect();
-        MongoUtils.updateStat("nbrSentence", key.toString(), result.get());
-        MongoUtils.close();
+        mongo.updateStat("nbrSentence", key.toString(), result.get());
     }
 }
