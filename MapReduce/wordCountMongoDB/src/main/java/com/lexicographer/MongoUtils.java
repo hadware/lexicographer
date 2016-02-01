@@ -4,8 +4,11 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.hadoop.util.MongoClientURIBuilder;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.bson.BSONDecoder;
 import org.bson.BSONObject;
 import org.bson.BasicBSONDecoder;
@@ -21,6 +24,7 @@ public class MongoUtils {
     private MongoClient mongoClient;
     private MongoDatabase db;
     private static MongoClientURIBuilder uriBuilder = new MongoClientURIBuilder();
+
     static {
         uriBuilder.addHost("epub1-0u278hoc.cloudapp.net", 27017);
         uriBuilder.addHost("epub2-a7q4vt06.cloudapp.net", 27017);
@@ -86,14 +90,32 @@ public class MongoUtils {
     }
 
     private HashMap<String, ArrayList<DBObject>> extractInformation(String filename) throws FileNotFoundException {
-        File file = new File(filename);
         String docId;
         HashMap<String, ArrayList<DBObject>> map = new HashMap<>();
-        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        InputStream inputStream = null;
 
-
-        BSONDecoder decoder = new BasicBSONDecoder();
         try {
+            Configuration configuration = new Configuration();
+            FileSystem fs = FileSystem.get(new URI("hdfs://alpha-ahasall.cloudapp.net"),configuration);
+            Path pt = new Path(filename);
+
+            if (!fs.exists(pt)) {
+                System.out.print("Input file not found: " + pt.getName());
+                System.exit(1);
+            }
+            if (!fs.isFile(pt)) {
+                System.out.print("fs is not a file");
+                System.exit(2);
+            }
+
+            inputStream = fs.open(pt);
+            if (inputStream == null) {
+                System.out.print("FUCK");
+                return null;
+            }
+
+            BSONDecoder decoder = new BasicBSONDecoder();
+
             int count = 0;
             while (inputStream.available() > 0) {
                 BSONObject obj = decoder.readObject(inputStream);
@@ -112,7 +134,7 @@ public class MongoUtils {
                 map.get(docId).add(document);
                 count++;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             try {
